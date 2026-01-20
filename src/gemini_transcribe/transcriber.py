@@ -59,7 +59,7 @@ class Transcriber:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model: str = "gemini-2.5-pro-preview-05-06",
+        model: str = "gemini-3-pro-preview",
         chunk_duration: int = 20 * 60,  # 20 minutes in seconds
         overlap: int = 10,  # 10 seconds overlap
         chunks_dir: str = "audio_chunks",

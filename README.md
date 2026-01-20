@@ -125,7 +125,7 @@ from gemini_transcribe import Transcriber
 # Initialize
 transcriber = Transcriber(
     api_key="your-api-key",  # or set GEMINI_API_KEY env var
-    model="gemini-2.5-pro-preview-05-06",
+    model="gemini-3-pro-preview",
     chunk_duration=20 * 60,  # 20 minutes
     overlap=10,  # 10 seconds
 )
@@ -187,7 +187,7 @@ To force re-transcription, delete the `transcript_chunk_*.md` files.
 |--------|---------|-------------|
 | `-o, --output` | `transcript.md` | Output file path |
 | `-k, --api-key` | env var | Gemini API key |
-| `-m, --model` | `gemini-2.5-pro-preview-05-06` | Model to use |
+| `-m, --model` | `gemini-3-pro-preview` | Model to use |
 | `--chunk-duration` | `1200` (20 min) | Chunk duration in seconds |
 | `--overlap` | `10` | Overlap between chunks in seconds |
 | `-i, --instructions` | auto-detect | Custom instructions file |

@@ -20,14 +20,14 @@ class GeminiAPI:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model: str = "gemini-2.5-pro-preview-05-06"
+        model: str = "gemini-3-pro-preview"
     ):
         """
         Initialize the Gemini API client.
 
         Args:
             api_key: Google AI API key. If not provided, reads from GEMINI_API_KEY env var.
-            model: Model to use for generation. Default is gemini-2.5-pro-preview-05-06.
+            model: Model to use for generation. Default is gemini-3-pro-preview.
         """
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
         if not self.api_key:

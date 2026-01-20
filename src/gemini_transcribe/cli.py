@@ -56,8 +56,8 @@ Environment Variables:
 
     parser.add_argument(
         "-m", "--model",
-        default="gemini-2.5-pro-preview-05-06",
-        help="Gemini model to use (default: gemini-2.5-pro-preview-05-06)"
+        default="gemini-3-pro-preview",
+        help="Gemini model to use (default: gemini-3-pro-preview)"
     )
 
     parser.add_argument(
