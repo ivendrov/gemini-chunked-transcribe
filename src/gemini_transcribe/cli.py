@@ -85,6 +85,11 @@ Environment Variables:
     )
 
     parser.add_argument(
+        "--speakers",
+        help="Comma-separated list of speaker names (e.g., 'Ivan Vendrov,Robin Hanson')"
+    )
+
+    parser.add_argument(
         "--chunks-dir",
         default="audio_chunks",
         help="Directory to store audio chunks (default: audio_chunks)"
@@ -127,7 +132,8 @@ Environment Variables:
             audio_file=args.audio_file,
             output_file=args.output,
             instructions_file=instructions_file,
-            header=args.header
+            header=args.header,
+            speakers=args.speakers
         )
 
         if not args.quiet:

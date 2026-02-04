@@ -10,10 +10,17 @@ from typing import Optional, List, Dict, Any
 from .api import GeminiAPI
 
 
-DEFAULT_CHUNK_PROMPT = """Please transcribe this audio interview/conversation segment.
+def get_chunk_prompt(speakers: Optional[List[str]] = None) -> str:
+    """Generate the chunk transcription prompt with optional speaker names."""
+    if speakers and len(speakers) >= 2:
+        speaker_format = ", ".join([f"**{name}:**" for name in speakers])
+    else:
+        speaker_format = "**Speaker 1:** and **Speaker 2:** (or use actual names if identifiable)"
+
+    return f"""Please transcribe this audio interview/conversation segment.
 
 FORMAT:
-- Speaker names in bold: **Speaker 1:** and **Speaker 2:** (or use actual names if identifiable)
+- Speaker names in bold: {speaker_format}
 - Use proper paragraphing for longer responses
 
 CLEANING INSTRUCTIONS:
@@ -25,6 +32,9 @@ CLEANING INSTRUCTIONS:
 6. Keep substantive questions and responses only
 
 Provide the complete transcript for this segment."""
+
+
+DEFAULT_CHUNK_PROMPT = get_chunk_prompt()
 
 
 DEFAULT_MERGE_PROMPT = """Below is a transcript assembled from multiple audio chunks. Please:
@@ -202,7 +212,8 @@ class Transcriber:
         chunk_prompt: Optional[str] = None,
         merge_prompt: Optional[str] = None,
         instructions_file: Optional[str] = None,
-        header: Optional[str] = None
+        header: Optional[str] = None,
+        speakers: Optional[str] = None
     ) -> str:
         """
         Transcribe a long audio file.
@@ -215,6 +226,7 @@ class Transcriber:
             instructions_file: Path to a file containing custom instructions
                               (appended to chunk prompt).
             header: Optional header text to prepend to the transcript.
+            speakers: Comma-separated list of speaker names (e.g., "Ivan Vendrov,Robin Hanson").
 
         Returns:
             The final transcript text.
@@ -231,9 +243,14 @@ class Transcriber:
                 custom_instructions = instructions_path.read_text()
                 self._log(f"Loaded custom instructions from {instructions_file}")
 
+        # Parse speaker names if provided
+        speaker_list = None
+        if speakers:
+            speaker_list = [s.strip() for s in speakers.split(",")]
+
         # Set up prompts
         if chunk_prompt is None:
-            chunk_prompt = DEFAULT_CHUNK_PROMPT
+            chunk_prompt = get_chunk_prompt(speaker_list)
         if custom_instructions:
             chunk_prompt = chunk_prompt + "\n\nADDITIONAL INSTRUCTIONS:\n" + custom_instructions
 
