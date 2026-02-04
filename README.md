@@ -18,7 +18,8 @@ gemini-transcribe interview.wav \
   --chunk-duration 1200 \
   --overlap 10 \
   --instructions transcription_instructions.md \
-  --header "# My Interview Title"
+  --header "# My Interview Title" \
+  --speakers "Ivan Vendrov,Robin Hanson"
 ```
 
 ## Why Chunking?
@@ -53,6 +54,7 @@ The file is auto-detected, or pass `--instructions path/to/file.md`.
 | `--overlap` | `10` | Overlap between chunks |
 | `-i, --instructions` | auto-detect | Custom instructions file |
 | `--header` | none | Header text for transcript |
+| `--speakers` | none | Comma-separated speaker names |
 | `-q, --quiet` | false | Suppress progress |
 
 ## Resuming
