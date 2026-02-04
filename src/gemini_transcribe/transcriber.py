@@ -28,8 +28,7 @@ CLEANING INSTRUCTIONS:
 2. Remove pure backchanneling: "right", "yeah", "uh-huh", "mm-hmm", "okay", "sure", "interesting" when they're just acknowledgments (not substantive responses)
 3. Keep "right" or "yeah" only when part of making a substantive point
 4. Clean up false starts, stutters, and repetitions for readability
-5. Preserve all intellectual content and nuance
-6. Keep substantive questions and responses only
+5. Otherwise preserve all words precisely
 
 Provide the complete transcript for this segment."""
 
