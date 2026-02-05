@@ -2,6 +2,7 @@
 Main transcriber class for chunked audio transcription.
 """
 
+import hashlib
 import os
 import subprocess
 from pathlib import Path
@@ -107,12 +108,13 @@ class Transcriber:
             raise Exception(f"ffprobe failed: {result.stderr}")
         return float(result.stdout.strip())
 
-    def split_audio(self, filepath: Path) -> List[Dict[str, Any]]:
+    def split_audio(self, filepath: Path, cache_prefix: str) -> List[Dict[str, Any]]:
         """
         Split audio file into chunks with overlap.
 
         Args:
             filepath: Path to the audio file.
+            cache_prefix: Unique prefix for chunk files (includes path hash).
 
         Returns:
             List of chunk dictionaries with 'file', 'start', 'end', 'num' keys.
@@ -129,7 +131,7 @@ class Transcriber:
 
         while start < duration:
             end = min(start + self.chunk_duration, duration)
-            chunk_file = self.chunks_dir / f"chunk_{chunk_num:02d}.wav"
+            chunk_file = self.chunks_dir / f"{cache_prefix}_chunk_{chunk_num:02d}.wav"
 
             # Use ffmpeg to extract chunk
             cmd = [
@@ -256,16 +258,21 @@ class Transcriber:
         if merge_prompt is None:
             merge_prompt = DEFAULT_MERGE_PROMPT
 
+        # Generate unique prefix from absolute path hash for caching
+        abs_path = str(audio_path.resolve())
+        path_hash = hashlib.sha256(abs_path.encode()).hexdigest()[:12]
+        cache_prefix = f"{audio_path.stem}_{path_hash}"
+
         # Step 1: Split audio
         self._log("Step 1: Splitting audio into chunks...")
-        chunks = self.split_audio(audio_path)
+        chunks = self.split_audio(audio_path, cache_prefix)
 
         # Step 2: Transcribe each chunk (or load existing)
         self._log("\nStep 2: Loading/transcribing chunks...")
         transcripts = []
 
         for chunk in chunks:
-            chunk_transcript_file = f"transcript_chunk_{chunk['num']:02d}.md"
+            chunk_transcript_file = f"{cache_prefix}_chunk_{chunk['num']:02d}.md"
 
             # Check if we already have this chunk transcribed
             if os.path.exists(chunk_transcript_file):
